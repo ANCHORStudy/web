@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
 
@@ -36,7 +35,6 @@ export default function AuthButton() {
     router.refresh();
   };
 
-  // DiscordアバターURLを取得
   const avatarUrl = user?.user_metadata?.avatar_url ||
     (user?.user_metadata?.avatar && user?.user_metadata?.sub
       ? `https://cdn.discordapp.com/avatars/${user.user_metadata.sub}/${user.user_metadata.avatar}.png`
@@ -65,17 +63,6 @@ export default function AuthButton() {
           className="w-8 h-8 rounded-full border border-border"
         />
       )}
-      {/*
-      <Link
-        href="/profile"
-        className="inline-flex items-center px-4 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors"
-      >
-        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-        </svg>
-        Profile
-      </Link>
-      */}
       <button
         onClick={handleSignOut}
         className="inline-flex items-center px-4 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors"

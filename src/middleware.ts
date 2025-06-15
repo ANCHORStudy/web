@@ -63,7 +63,7 @@ async function checkDiscordServerMembership(discordId: string): Promise<boolean>
 
 export const config = {
   matcher: [
-    '/lecture',
-    '/lecture/:path*'
+    '/class',
+    '/class/:path*'
   ],
 }; 

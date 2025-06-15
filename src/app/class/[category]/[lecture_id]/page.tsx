@@ -1,40 +1,41 @@
 'use client';
 
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { useEffect, useState, useRef } from 'react';
-import { Lecture } from '@/lib/supabase';
+import React, { useEffect, useState, useRef } from 'react';
+import { Lecture } from '@/lib/types';
 import { IoMdClose } from 'react-icons/io';
 import { IoDocumentText } from 'react-icons/io5';
 import { IoMusicalNotes } from 'react-icons/io5';
+import { fetchClassByCategory, fetchLecture } from '@/lib/client-data';
 
 export default function LecturePage({
   params,
 }: {
-  params: { category: string; lecture_id: string };
+  params: Promise<{ category: string; lecture_id: string }>;
 }) {
+  const resolvedParams = React.use(params);
   const [lecture, setLecture] = useState<Lecture | null>(null);
+  const [className, setClassName] = useState<string>('');
   const [openSidebar, setOpenSidebar] = useState<'text' | 'audio' | null>(null);
   const [sidebarWidth, setSidebarWidth] = useState(320); // px
   const [isResizing, setIsResizing] = useState(false);
-  const supabase = createClientComponentClient();
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const fetchLecture = async () => {
-      const { data } = await supabase
-        .from('lectures')
-        .select('*')
-        .eq('category', params.category)
-        .eq('lecture_id', params.lecture_id)
-        .single();
-
-      if (data) {
-        setLecture(data);
+    const fetchData = async () => {
+      try {
+        const [lectureData, classData] = await Promise.all([
+          fetchLecture(resolvedParams.category, resolvedParams.lecture_id),
+          fetchClassByCategory(resolvedParams.category)
+        ]);
+        setLecture(lectureData);
+        setClassName(classData.name);
+      } catch (error) {
+        console.error('Error fetching data:', error);
       }
     };
 
-    fetchLecture();
-  }, [params.category, params.lecture_id, supabase]);
+    fetchData();
+  }, [resolvedParams.category, resolvedParams.lecture_id]);
 
   // Handle drag for resizing
   useEffect(() => {
@@ -94,14 +95,21 @@ export default function LecturePage({
         >
           {/* タイトルと戻るリンクを左右に配置 */}
           <div className="flex items-center justify-between w-full max-w-5xl mt-6 mb-2">
-            <h1 className="text-2xl font-bold text-gray-900 truncate">
-              {lecture.category} - Lecture {lecture.lecture_id}
-            </h1>
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900 truncate">
+                {className} - Lecture {lecture.lecture_id}
+              </h1>
+              {lecture.chapter && (
+                <p className="text-gray-600 mt-1">
+                  Chapter: {lecture.chapter}
+                </p>
+              )}
+            </div>
             <a
               href={`/class/${lecture.category}`}
               className="text-indigo-600 hover:text-indigo-900 text-base ml-4 whitespace-nowrap"
             >
-              ← Back to {lecture.category}
+              ← Back to {className}
             </a>
           </div>
 

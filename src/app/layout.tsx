@@ -16,14 +16,12 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Supabaseからカテゴリ一覧を取得
   const cookieStore = cookies();
   const supabase = createServerComponentClient({ cookies: () => cookieStore });
   const { data: classes } = await supabase
     .from('class')
     .select('category, name')
     .order('category', { ascending: true });
-  // Discordログイン状態を取得
   const { data: { user } } = await supabase.auth.getUser();
 
   return (
@@ -42,7 +40,6 @@ export default async function RootLayout({
             </div>
             <nav className="p-4 space-y-2">
               <div className="text-sm font-medium text-muted mb-2">Classes</div>
-              {/* 動的カテゴリ一覧 */}
               {classes && classes.length > 0 ? (
                 classes.map((c: { category: string; name: string }) => (
                   <a
@@ -73,7 +70,6 @@ export default async function RootLayout({
 
           {/* Main Content */}
           <div className="flex-1 flex flex-col">
-            {/* Discord未ログイン時のバナー */}
             {!user && (
               <div className="w-full bg-yellow-100 border-b border-yellow-300 text-yellow-900 text-center py-3 font-semibold text-base">
                 Please login with Discord!
@@ -81,23 +77,8 @@ export default async function RootLayout({
             )}
             <header className="bg-card border-b border-border">
               <div className="px-6 py-4 flex justify-between items-center">
+                <div className="flex items-center space-x-4" />
                 <div className="flex items-center space-x-4">
-                  {/*
-                  <input
-                    type="search"
-                    placeholder="Search sessions..."
-                    className="w-64 px-4 py-2 text-sm bg-background border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
-                  */}
-                </div>
-                <div className="flex items-center space-x-4">
-                  {/*
-                  <button className="text-muted hover:text-foreground transition-colors">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                    </svg>
-                  </button>
-                  */}
                   <AuthButton />
                 </div>
               </div>
