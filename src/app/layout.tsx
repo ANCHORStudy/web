@@ -3,6 +3,8 @@ import './globals.css';
 import { Inter } from 'next/font/google';
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
+import Link from 'next/link';
+import Image from 'next/image';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -32,32 +34,32 @@ export default async function RootLayout({
           <aside className="w-64 bg-card border-r border-border flex-shrink-0">
             <div className="p-4 border-b border-border">
               <div className="p-4 border-b border-border flex items-center space-x-2">
-                <img src="/anchor-logo.png" alt="Anchor Logo" className="w-8 h-8 rounded-md" />
-                <a href="/" className="text-xl font-semibold text-foreground hover:text-primary transition-colors">
+                <Image src="/anchor-logo.png" alt="Anchor Logo" width={32} height={32} className="rounded-md" />
+                <Link href="/" className="text-xl font-semibold text-foreground hover:text-primary transition-colors">
                   Anchor
-                </a>
+                </Link>
               </div>
             </div>
             <nav className="p-4 space-y-2">
               <div className="text-sm font-medium text-muted mb-2">Classes</div>
               {classes && classes.length > 0 ? (
                 classes.map((c: { category: string; name: string }) => (
-                  <a
+                  <Link
                     key={c.category}
                     href={`/class/${c.category}`}
                     className="block px-3 py-2 text-foreground hover:bg-border rounded-md transition-colors"
                   >
                     {c.name}
-                  </a>
+                  </Link>
                 ))
               ) : (
                 <div className="text-muted text-sm">No classes</div>
               )}
               <div className="pt-4 mt-4 border-t border-border">
                 <div className="text-sm font-medium text-muted mb-2">Resources</div>
-                <a href="/resources" className="block px-3 py-2 text-foreground hover:bg-border rounded-md transition-colors">
+                <Link href="/resources" className="block px-3 py-2 text-foreground hover:bg-border rounded-md transition-colors">
                   All Resources
-                </a>
+                </Link>
                 <a href="https://sites.google.com/view/anchorstudy" target="_blank" rel="noopener noreferrer" className="block px-3 py-2 text-foreground hover:bg-border rounded-md transition-colors">
                   About
                 </a>

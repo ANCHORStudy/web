@@ -3,15 +3,14 @@ import ErrorMessage from '@/components/ErrorMessage';
 import { fetchClassByCategory, fetchLecturesByCategory } from '@/lib/data';
 import { Lecture } from '@/lib/types';
 
-export default async function CategoryPage({
-  params,
-}: {
-  params: { category: string };
-}) {
+export type PageProps = { params: Promise<{ category: string }> };
+
+export default async function CategoryPage({ params }: PageProps) {
   try {
+    const { category } = await params;
     const [classData, lectures] = await Promise.all([
-      fetchClassByCategory(params.category),
-      fetchLecturesByCategory(params.category)
+      fetchClassByCategory(category),
+      fetchLecturesByCategory(category)
     ]);
 
     return (

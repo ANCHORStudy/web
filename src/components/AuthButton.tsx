@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
+import Image from 'next/image';
 
 export default function AuthButton() {
   const [user, setUser] = useState<User | null>(null);
@@ -57,10 +58,12 @@ export default function AuthButton() {
   return (
     <div className="flex items-center space-x-4">
       {avatarUrl && (
-        <img
+        <Image
           src={avatarUrl}
           alt="Discord Avatar"
-          className="w-8 h-8 rounded-full border border-border"
+          width={32}
+          height={32}
+          className="rounded-full border border-border"
         />
       )}
       <button

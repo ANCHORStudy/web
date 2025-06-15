@@ -1,6 +1,3 @@
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
-import AuthButton from '@/components/AuthButton';
 import ClassCard from '@/components/ClassCard';
 import ErrorMessage from '@/components/ErrorMessage';
 import { calculateClassStats } from '@/lib/stats';

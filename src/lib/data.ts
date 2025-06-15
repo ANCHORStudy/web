@@ -1,6 +1,7 @@
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { Class, Lecture } from './types';
+import { PostgrestError } from '@supabase/supabase-js';
 
 // Utility function to create Supabase client
 const createSupabaseClient = () => {
@@ -9,7 +10,7 @@ const createSupabaseClient = () => {
 };
 
 // Utility function for error handling
-const handleError = (error: any, message: string) => {
+const handleError = (error: PostgrestError | null, message: string) => {
   if (error) {
     throw new Error(message);
   }
